@@ -1,13 +1,22 @@
 local repo = "https://raw.githubusercontent.com/ssssa4848/asdasdasde/main/"
 
--- Çalıştırılacak dosyaların listesi
+-- Yüklenmesi gereken tüm dosyalar
 local files = {
-    "PFActor.lua",
-    "require-loader.lua"
+    "files/games/RogueLineage.lua",
+    "require-loader.lua",
+    "PFActor.lua"
 }
 
 for _, file in ipairs(files) do
     local url = repo .. file
-    print("Loading: " .. url)  -- Hata ayıklama için
-    loadstring(game:HttpGet(url, true))()
+    print("Loading: " .. url)  -- Debugging için
+    local success, response = pcall(function()
+        return game:HttpGet(url, true)
+    end)
+    
+    if success and response then
+        loadstring(response)()
+    else
+        warn("Failed to load: " .. url)
+    end
 end
